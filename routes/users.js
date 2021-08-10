@@ -6,8 +6,21 @@ const authenticate = require('../authenticate');
 const router = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res) {
-    res.send('respond with a resource');
+//router.get('/', function(req, res) {
+//
+//    res.send('respond with a resource');
+//});
+
+/* GET users listing ADMIN ONLY Workshop */
+router.get('/', authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
+
+  User.find()
+  .then(users => {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.json(users);
+  })
+  .catch(err => next(err));
 });
 
 router.post('/signup', (req, res, next) => {
